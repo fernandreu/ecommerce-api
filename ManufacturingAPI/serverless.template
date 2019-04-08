@@ -1,0 +1,109 @@
+{
+	"AWSTemplateFormatVersion" : "2010-09-09",
+	"Transform" : "AWS::Serverless-2016-10-31",
+	"Description" : "An AWS Serverless Application that uses the ASP.NET Core framework running in Amazon Lambda.",
+
+	"Parameters" : {
+	},
+
+	"Conditions" : {
+	},
+
+	"Resources" : {
+		"AspNetCoreFunction" : {
+			"Type" : "AWS::Serverless::Function",
+			"Properties": {
+			    "Handler": "ManufacturingAPI::ManufacturingAPI.LambdaEntryPoint::FunctionHandlerAsync",
+			    "Runtime": "dotnetcore2.1",
+			    "CodeUri": "",
+			    "MemorySize": 256,
+			    "Timeout": 30,
+			    "Role": null,
+			    "Policies": [ "AWSLambdaFullAccess", "CloudWatchFullAccess" ],
+			    "Environment" : {
+				    "Variables" : {
+				    }
+			    },
+			    "Events": {
+				    "ProxyResource": {
+					    "Type": "Api",
+					    "Properties": {
+						    "Path": "/{proxy+}",
+						    "Method": "ANY"
+					    }
+				    },
+				    "RootResource": {
+					    "Type": "Api",
+					    "Properties": {
+						    "Path": "/",
+						    "Method": "ANY"
+					    }
+				    }
+			    }
+			}
+		},
+        "MainTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": { 
+                "TableName" : "ManufacturingApi",
+                "KeySchema" : [
+                    {
+                        "AttributeName" : "PK",
+                        "KeyType" : "HASH"
+                    },
+                    {
+                        "AttributeName" : "SK",
+                        "KeyType" : "RANGE"
+                    }
+                ],
+                "AttributeDefinitions" : [
+                    {
+                        "AttributeName": "PK",
+                        "AttributeType": "S"
+                    },
+                    {
+                        "AttributeName": "SK",
+                        "AttributeType": "S"
+                    },
+                    {
+                        "AttributeName": "Data",
+                        "AttributeType": "S"
+                    }
+                ],
+                "ProvisionedThroughput" : {
+                    "ReadCapacityUnits" : 5,
+                    "WriteCapacityUnits" : 1
+                },
+                "GlobalSecondaryIndexes" : [
+                    {
+                        "IndexName" : "GSI-1",
+                        "KeySchema" : [
+                            {
+                                "AttributeName" : "SK",
+                                "KeyType" : "HASH"
+                            },
+                            {
+                                "AttributeName" : "Data",
+                                "KeyType" : "RANGE"
+                            }
+                        ],
+                        "Projection" : {
+                            "ProjectionType" : "ALL"
+                        },
+                        "ProvisionedThroughput" : {
+                            "ReadCapacityUnits" : 10,
+                            "WriteCapacityUnits" : 1
+                        }
+                    }
+                ]
+            }
+        }
+	},
+
+	"Outputs" : {
+		"ApiURL" : {
+			"Description" : "API endpoint URL for Prod environment",
+			"Value" : { "Fn::Sub" : "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/" }
+		}
+	}
+}

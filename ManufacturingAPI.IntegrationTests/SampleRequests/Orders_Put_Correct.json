@@ -1,0 +1,36 @@
+﻿{
+  "resource": "/{proxy+}",
+  "path": "/customers/TEST/orders/99",
+  "httpMethod": "PUT",
+  "headers": {
+    "Content-Type": "application/json" 
+  },
+  "queryStringParameters": null,
+  "pathParameters": {
+    "proxy": "customers/TEST/orders/99"
+  },
+  "stageVariables": null,
+  "requestContext": {
+    "accountId": "AAAAAAAAAAAA",
+    "resourceId": "5agfss",
+    "stage": "test-invoke-stage",
+    "requestId": "test-invoke-request",
+    "identity": {
+      "cognitoIdentityPoolId": null,
+      "accountId": "AAAAAAAAAAAA",
+      "cognitoIdentityId": null,
+      "caller": "BBBBBBBBBBBB",
+      "apiKey": "test-invoke-api-key",
+      "sourceIp": "test-invoke-source-ip",
+      "cognitoAuthenticationType": null,
+      "cognitoAuthenticationProvider": null,
+      "userArn": "arn:aws:iam::AAAAAAAAAAAA:root",
+      "userAgent": "Apache-HttpClient/4.5.x (Java/1.8.0_102)",
+      "user": "AAAAAAAAAAAA"
+    },
+    "resourcePath": "/{proxy+}",
+    "httpMethod": "PUT",
+    "apiId": "t2yh6sjnmk"
+  },
+  "body": "{\"OrderDate\": \"2019/03/30\", \"Products\": [ {\"ProductType\": \"canvas\", \"Quantity\": 6}, {\"ProductType\": \"mug\", \"Quantity\": 2} ]}"
+}
