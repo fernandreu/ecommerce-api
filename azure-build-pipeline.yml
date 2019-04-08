@@ -54,5 +54,4 @@ steps:
     templateFile: 'ManufacturingAPI/serverless.template'
     capabilityIAM: 'true'
     capabilityNamedIAM: 'true'
-    capabilities:
-      - CAPABILITY_AUTO_EXPAND
+    capabilities: CAPABILITY_AUTO_EXPAND
