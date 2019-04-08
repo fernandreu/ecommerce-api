@@ -59,7 +59,11 @@ namespace ManufacturingAPI.Services
             }).GetRemainingAsync();
 
             var result = this.mapper.Map<Order>(results.FirstOrDefault());
-            result.RequiredBinWidth = this.productChecker.CalculateRequiredWidth(result.Products);  // TODO: Handle this directly from AutoMapper
+            if (result != null)
+            {
+                result.RequiredBinWidth = this.productChecker.CalculateRequiredWidth(result.Products);  // TODO: Handle this directly from AutoMapper
+            }
+
             return result;
         }
         

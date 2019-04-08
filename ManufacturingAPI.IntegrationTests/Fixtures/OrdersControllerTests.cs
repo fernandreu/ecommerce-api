@@ -70,8 +70,8 @@ namespace ManufacturingAPI.IntegrationTests.Fixtures
 
             // Assert
             Assert.Equal(200, response.StatusCode);
-            var results = this.AssertIsJsonResponse<SaveOrderResults>(response);
-            Assert.Equal(42.0, results.BinWidth);
+            var results = this.AssertIsJsonResponse<Order>(response);
+            Assert.Equal(154.0, results.RequiredBinWidth);
         }
 
         [Fact]
