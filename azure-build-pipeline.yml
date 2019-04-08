@@ -22,9 +22,6 @@ steps:
 #     packageType: 'sdk'
 #     version: '2.2.202'
     
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'Build API ($(buildConfiguration))'
-
 - task: DotNetCoreCLI@2
   displayName: Run Unit Tests
   inputs:
@@ -40,13 +37,18 @@ steps:
 #     projects: '**/*IntegrationTests/*.csproj'
 #     arguments: '--configuration $(buildConfiguration)'
 
-# - task: PublishBuildArtifacts@1
-#   inputs:
-#     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-#     artifactName: 'artifact' 
-#     publishLocation: 'Container'
+- script: dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
+  displayName: 'Publish API ($(buildConfiguration))'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifacts
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'artifact' 
+    publishLocation: 'Container'
 
 - task: CloudFormationCreateOrUpdateStack@1
+  displayName: Publish Lambda
   inputs:
     awsCredentials: 'AWS'
     regionName: 'eu-west-1'
