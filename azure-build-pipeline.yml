@@ -45,3 +45,12 @@ steps:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: 'artifact' 
     publishLocation: 'Container'
+
+- task: CloudFormationCreateOrUpdateStack@1
+  inputs:
+    awsCredentials: 'AWS'
+    regionName: 'eu-west-1'
+    stackName: 'ManufacturingApiStack'
+    templateFile: 'ManufacturingAPI/serverless.template'
+    capabilityIAM: 'true'
+    capabilityNamedIAM: 'true'
