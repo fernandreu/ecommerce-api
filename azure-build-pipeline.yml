@@ -47,13 +47,23 @@ steps:
     artifactName: 'artifact' 
     publishLocation: 'Container'
 
-- task: CloudFormationCreateOrUpdateStack@1
-  displayName: Publish Lambda
+# The following are WIP tasks below are for deployment of the lambda
+
+- task: LambdaNETCoreDeploy@1
+  displayName: 'Deploy Lambda'
   inputs:
-    awsCredentials: 'AWS'
+    awsCredentials: AWS
     regionName: 'eu-west-1'
-    stackName: 'ManufacturingApiStack'
-    templateFile: 'ManufacturingAPI/serverless.template'
-    capabilityIAM: 'true'
-    capabilityNamedIAM: 'true'
-    capabilities: CAPABILITY_AUTO_EXPAND
+    command: deployServerless
+    lambdaProjectPath: ManufacturingAPI/
+    stackName: ManufacturingApiStack
+    s3Bucket: 'manufacturing-api-eu-ireland'
+
+# Install AWS CLI through pip
+# - task: UsePythonVersion@0
+#   inputs:
+#     versionSpec: '3.x'
+#     architecture: 'x64'
+
+# - script: 'pip install setuptools && pip install wheel && pip install awscli --upgrade'
+#   displayName: 'Install AWS CLI'
