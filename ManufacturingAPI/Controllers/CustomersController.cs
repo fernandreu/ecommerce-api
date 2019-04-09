@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
+using ManufacturingAPI.Infrastructure;
 using ManufacturingAPI.Models;
 using ManufacturingAPI.Services;
 
@@ -40,11 +39,10 @@ namespace ManufacturingAPI.Controllers
             var customer = await this.customerService.GetCustomerByIdAsync(customerId);
             if (customer == null)
             {
-                return this.NotFound();
+                return this.NotFound(new ApiError(404, "The customerId was not found"));
             }
 
             return customer;
         }
-
     }
 }

@@ -20,7 +20,7 @@ namespace ManufacturingAPI.Services
 
         public bool IsValidProduct(string productType)
         {
-            return this.validProducts.ContainsKey(productType);
+            return productType != null && this.validProducts.ContainsKey(productType);
         }
 
         public double CalculateRequiredWidth(IEnumerable<Product> products)
@@ -29,7 +29,7 @@ namespace ManufacturingAPI.Services
             var dict = new Dictionary<ProductDetails, int>();
             foreach (var product in products)
             {
-                if (!this.validProducts.TryGetValue(product.ProductType, out var details))
+                if (product.ProductType == null || !this.validProducts.TryGetValue(product.ProductType, out var details))
                 {
                     throw new ArgumentException($"Invalid product type: {product.ProductType}");
                 }

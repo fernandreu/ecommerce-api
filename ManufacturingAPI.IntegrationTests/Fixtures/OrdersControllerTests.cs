@@ -79,5 +79,17 @@ namespace ManufacturingAPI.IntegrationTests.Fixtures
         {
             await this.AssertStatusCode("Orders_Put_InvalidHeader.json", 400);
         }
+        
+        [Fact]
+        public async Task PutWithInvalidProductsShouldReturn400()
+        {
+            await this.AssertStatusCode("Orders_Put_InvalidProducts.json", 400);
+        }
+
+        [Fact]
+        public async Task PutWithoutProductsShouldReturn400()
+        {
+            await this.AssertStatusCode("Orders_Put_NoProducts.json", 400);
+        }
     }
 }

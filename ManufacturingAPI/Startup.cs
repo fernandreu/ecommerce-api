@@ -54,12 +54,22 @@ namespace ManufacturingAPI
 
             services.AddMvc(options =>
             {
+                options.Filters.Add<JsonExceptionFilter>();
                 options.Filters.Add<LinkRewritingFilter>();
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             
             services.AddAutoMapper(options =>
             {
                 options.AddProfile<MappingProfile>();
+            });
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var errorResponse = new ApiError(context.ModelState);
+                    return new BadRequestObjectResult(errorResponse);
+                };
             });
         }
 
@@ -72,13 +82,13 @@ namespace ManufacturingAPI
             }
             else
             {
-                app.UseExceptionHandler("/error/500");
+                app.UseExceptionHandler("/Error/500");
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
 
-            app.UseStatusCodePagesWithReExecute("/error/{0}");
+            app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
             app.UseMvc();
         }

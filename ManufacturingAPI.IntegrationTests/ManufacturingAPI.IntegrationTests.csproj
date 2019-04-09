@@ -18,6 +18,8 @@
     <None Remove="SampleRequests\Orders_GetSingle_InvalidOrder.json" />
     <None Remove="SampleRequests\Orders_Put_Correct.json" />
     <None Remove="SampleRequests\Orders_Put_InvalidHeader.json" />
+    <None Remove="SampleRequests\Orders_Put_InvalidProducts.json" />
+    <None Remove="SampleRequests\Orders_Put_NoProducts.json" />
     <None Remove="SampleRequests\Root_Get.json" />
   </ItemGroup>
   <ItemGroup>
@@ -33,6 +35,8 @@
     <Content Include="SampleRequests\Orders_GetSingle_InvalidOrder.json" />
     <Content Include="SampleRequests\Orders_Put_Correct.json" />
     <Content Include="SampleRequests\Orders_Put_InvalidHeader.json" />
+    <Content Include="SampleRequests\Orders_Put_InvalidProducts.json" />
+    <Content Include="SampleRequests\Orders_Put_NoProducts.json" />
     <Content Include="SampleRequests\Root_Get.json" />
   </ItemGroup>
   <ItemGroup>

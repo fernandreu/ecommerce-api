@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
+using ManufacturingAPI.Infrastructure;
 using ManufacturingAPI.Models;
 using ManufacturingAPI.Services;
 
@@ -28,8 +28,7 @@ namespace ManufacturingAPI.Controllers
             var orders = await this.orderService.GetAllOrdersAsync(customerId);
             if (orders == null)
             {
-                // This probably means the customerId was not found
-                return this.NotFound();
+                return this.NotFound(new ApiError(404, "The customerId was not found"));
             }
 
             return new Collection<Order>
@@ -47,7 +46,7 @@ namespace ManufacturingAPI.Controllers
             var result = await this.orderService.GetOrderByIdAsync(customerId, orderId);
             if (result == null)
             {
-                return this.NotFound();
+                return this.NotFound(new ApiError(404, "There combination of customerId and orderId specified was not found"));
             }
 
             return result;
@@ -61,7 +60,7 @@ namespace ManufacturingAPI.Controllers
             var result = await this.orderService.SaveOrderAsync(customerId, orderId, order);
             if (result == null)
             {
-                return this.BadRequest();
+                return this.BadRequest(new ApiError(400, "The order specified is invalid and cannot be saved"));
             }
 
             return result;

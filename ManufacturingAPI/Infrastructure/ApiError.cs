@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using System.Linq;
+
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+using Newtonsoft.Json;
 
 namespace ManufacturingAPI.Infrastructure
 {
@@ -14,6 +18,13 @@ namespace ManufacturingAPI.Infrastructure
             : this(statusCode, statusDescription)
         {
             this.Message = message;
+        }
+        
+        public ApiError(ModelStateDictionary modelState)
+        {
+            this.StatusCode = 400;
+            this.StatusDescription = "Invalid parameters.";
+            this.Message = modelState.FirstOrDefault(x => x.Value.Errors.Any()).Value.Errors.FirstOrDefault().ErrorMessage;
         }
 
         public int StatusCode { get; private set; }

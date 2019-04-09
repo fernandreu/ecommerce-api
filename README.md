@@ -13,6 +13,8 @@ https://jzjexhjx9i.execute-api.eu-west-1.amazonaws.com/Prod/
 Navigation through the API should mostly be self-explanatory, as every page directly provides you with the links you need to
 use to navigate to child elements. Nevertheless, all the API endpoints are summarised below.
 
+For clarity, the navigation links have been removed from all the response body examples below.
+
 ### See the full list of customers
 
 - **Endpoint:** `GET /Customers`
@@ -141,6 +143,7 @@ Response body example:
 - **Observations:**
     - There are no restrictions in terms of the order IDs that can be used
     - If an order with that ID already exists, **all** its contents will be replaced
+    - The request body must contain at least one product
     - The `orderId` and / or `requiredMinWidth` properties will be ignored when specified as part of the request body
 
 Request body example:
