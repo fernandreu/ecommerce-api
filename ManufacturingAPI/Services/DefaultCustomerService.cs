@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
 
 using AutoMapper;
 
@@ -19,6 +21,16 @@ namespace ManufacturingAPI.Services
         {
             this.context = context;
             this.mapper = mapper;
+        }
+
+        public async Task<IEnumerable<Customer>> GetAllCustomersAsync()
+        {
+            var results = await this.context.ScanAsync<CustomerEntity>(new[]
+            {
+                new ScanCondition(nameof(CustomerEntity.CustomerId), ScanOperator.BeginsWith, CustomerEntity.Prefix),
+            }).GetRemainingAsync();
+
+            return results.Select(x => this.mapper.Map<Customer>(x));
         }
 
         public async Task<Customer> GetCustomerByIdAsync(string customerId)

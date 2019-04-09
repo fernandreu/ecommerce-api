@@ -25,8 +25,8 @@ namespace ManufacturingAPI.IntegrationTests.Fixtures
 
             // Assert
             Assert.Equal(200, response.StatusCode);
-            var orders = this.AssertIsJsonResponse<List<Order>>(response);
-            Assert.NotEmpty(orders);
+            var orders = this.AssertIsJsonResponse<Collection<Order>>(response);
+            Assert.NotEmpty(orders.Value);
         }
 
         [Fact]

@@ -1,5 +1,7 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
 
+using Newtonsoft.Json;
+
 namespace ManufacturingAPI.Models
 {
     [DynamoDBTable(MainTable.Name)]
@@ -15,5 +17,8 @@ namespace ManufacturingAPI.Models
 
         [DynamoDBProperty(AttributeName = MainTable.DataAttribute)]
         public string Address { get; set; }
+
+        [JsonIgnore]
+        public string ResourceCustomerId => this.CustomerId?.Substring(Prefix.Length);
     }
 }

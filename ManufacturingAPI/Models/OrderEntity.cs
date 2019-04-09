@@ -2,6 +2,8 @@
 
 using Amazon.DynamoDBv2.DataModel;
 
+using Newtonsoft.Json;
+
 namespace ManufacturingAPI.Models
 {
     [DynamoDBTable(MainTable.Name)]
@@ -19,5 +21,11 @@ namespace ManufacturingAPI.Models
         public string OrderDate { get; set; }
 
         public List<Product> Products { get; set; }
+        
+        [JsonIgnore]
+        public string ResourceCustomerId => this.CustomerId?.Substring(CustomerEntity.Prefix.Length);
+
+        [JsonIgnore]
+        public string ResourceOrderId => this.OrderId?.Substring(Prefix.Length);
     }
 }

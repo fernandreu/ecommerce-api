@@ -15,7 +15,7 @@ use to navigate to child elements. Nevertheless, all the API endpoints are summa
 
 ### See the full list of customers
 
-- **Endpoint:** `GET /customers`
+- **Endpoint:** `GET /Customers`
 - **Observations:**
     - For the purposes of this demo, anyone can use this endpoint and see all properties of each customer
     - On a real production API, there should be restrictions in place to access sensitive data (e.g. by requiring 
@@ -26,7 +26,7 @@ Response body example:
 ```
 {
     "count": 2,
-    "values": [
+    "value": [
         {
             "customerId": "TEST",
             "contactName": "Fernando Andreu",
@@ -43,7 +43,7 @@ Response body example:
 
 ### Get data from a specific customer
 
-- **Endpoint:** `GET /customers/{customerId}`
+- **Endpoint:** `GET /Customers/{customerId}`
 - **Observations:**
     - For the purposes of this demo, there are only two customers available with IDs `TEST` and `1` respectively
     - Customers cannot be created, updated or deleted
@@ -60,7 +60,7 @@ Response body example:
 
 ### Get all orders from a specific customer
 
-- **Endpoint:** `GET /customers/{customerId}/orders`
+- **Endpoint:** `GET /Customers/{customerId}/Orders`
 - **Response body:** A collection of JSON objects representing each order
 
 Response body example:
@@ -68,7 +68,7 @@ Response body example:
 ```
 {
     "count": 3,
-    "values": [
+    "value": [
         {
             "orderId": "1",
             "date": "2019/04/07",
@@ -112,7 +112,7 @@ Response body example:
 
 ### Get data from a specific order
 
-- **Endpoint:** `GET /customers/{customerId}/orders/{orderId}`
+- **Endpoint:** `GET /Customers/{customerId}/Orders/{orderId}`
 - **Response body:** A JSON object representing the order
 
 Response body example:
@@ -133,7 +133,7 @@ Response body example:
 
 ### Create order for a given customer with an explicit order ID
 
-- **Endpoint:** `PUT /customers/{customerId}/orders/{orderId}`
+- **Endpoint:** `PUT /Customers/{customerId}/Orders/{orderId}`
 - **Headers:**
     - `Content-Type: application/json`
 - **Request body:** A JSON object representing the order, including each product type and quantity
@@ -214,6 +214,6 @@ This project is integrated with Azure Pipelines:
 
 On push, the app is built and tested. If these steps are successful, the lambda will be deployed to AWS automatically.
 
-*Due to time constraints, only unit tests (and not integration tests) are automated through the pipeline. For the
+**Due to time constraints, only unit tests (and not integration tests) are automated through the pipeline.** For the
 same reason, no automated testing of the web app in a production-like environment takes place before the final release
-into production.*
+into production.

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ManufacturingAPI.Models;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace ManufacturingAPI.Controllers
 {
@@ -6,14 +8,16 @@ namespace ManufacturingAPI.Controllers
     [ApiController]
     public class RootController : ControllerBase
     {
-        [HttpGet]
-        public object Index()
+        [HttpGet(Name = nameof(GetRoot))]
+        public IActionResult GetRoot()
         {
-            return new
+            var response = new RootResponse
             {
-                Customers = "TODO/Link/To/Customers",
-                Orders = "TODO/Link/To/Orders",
+                Self = Link.To(nameof(this.GetRoot)),
+                Customers = Link.ToCollection(nameof(CustomersController.GetAllCustomers)),
             };
+
+            return this.Ok(response);
         }
     }
 }

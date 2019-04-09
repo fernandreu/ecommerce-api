@@ -10,7 +10,7 @@ namespace ManufacturingAPI.Controllers
     [ApiController]
     public class ErrorController : ControllerBase
     {
-        [HttpGet("{statusCode}")]
+        [HttpGet("{statusCode}", Name = nameof(HandleStatusCode))]
         public ActionResult<ApiError> HandleStatusCode(int statusCode)
         {
             var parsedCode = (HttpStatusCode)statusCode;

@@ -6,6 +6,7 @@ using Amazon.Runtime;
 
 using AutoMapper;
 
+using ManufacturingAPI.Filters;
 using ManufacturingAPI.Infrastructure;
 using ManufacturingAPI.Services;
 
@@ -51,7 +52,10 @@ namespace ManufacturingAPI
                 services.AddAWSService<IAmazonDynamoDB>();
             }
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<LinkRewritingFilter>();
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             
             services.AddAutoMapper(options =>
             {

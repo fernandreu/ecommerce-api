@@ -7,6 +7,7 @@ using Amazon.DynamoDBv2.DocumentModel;
 
 using AutoMapper;
 
+using ManufacturingAPI.Extensions;
 using ManufacturingAPI.Models;
 
 namespace ManufacturingAPI.Services
@@ -42,7 +43,7 @@ namespace ManufacturingAPI.Services
                 new ScanCondition(nameof(OrderEntity.CustomerId), ScanOperator.Equal, CustomerEntity.Prefix + customerId),
             }).GetRemainingAsync();
             
-            return results.Select(x => this.mapper.Map<Order>(x));
+            return results.Select(x => this.mapper.MapOrderFull(x, this.productChecker));
         }
 
         public async Task<Order> GetOrderByIdAsync(string customerId, string orderId)
@@ -58,13 +59,7 @@ namespace ManufacturingAPI.Services
                 new ScanCondition(nameof(OrderEntity.CustomerId), ScanOperator.Equal, CustomerEntity.Prefix + customerId),
             }).GetRemainingAsync();
 
-            var result = this.mapper.Map<Order>(results.FirstOrDefault());
-            if (result != null)
-            {
-                result.RequiredBinWidth = this.productChecker.CalculateRequiredWidth(result.Products);  // TODO: Handle this directly from AutoMapper
-            }
-
-            return result;
+            return this.mapper.MapOrderFull(results.FirstOrDefault(), this.productChecker);
         }
         
         public async Task<Order> SaveOrderAsync(string customerId, string orderId, Order order)
@@ -88,15 +83,13 @@ namespace ManufacturingAPI.Services
             {
                 OrderId = OrderEntity.Prefix + orderId,
                 CustomerId = CustomerEntity.Prefix + customerId,
-                Products = order.Products,
+                Products = order.Products.ToList(),
                 OrderDate = order.OrderDate,
             };
 
             await this.context.SaveAsync(orderEntity);
             
-            var result = this.mapper.Map<Order>(orderEntity);
-            result.RequiredBinWidth = this.productChecker.CalculateRequiredWidth(result.Products);  // TODO: Handle this directly from AutoMapper
-            return result;
+            return this.mapper.MapOrderFull(orderEntity, this.productChecker);
         }
     }
 }

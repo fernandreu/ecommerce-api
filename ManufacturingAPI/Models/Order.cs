@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 
+using Newtonsoft.Json;
+
 namespace ManufacturingAPI.Models
 {
-    public class Order
+    public class Order : Resource
     {
         public string OrderId { get; set; }
         
@@ -10,8 +12,14 @@ namespace ManufacturingAPI.Models
         
         public string OrderDate { get; set; }
 
-        public List<Product> Products { get; set; }
+        public IList<Product> Products { get; set; }
 
         public double RequiredBinWidth { get; set; }
+
+        [JsonIgnore]
+        public string EntityCustomerId => CustomerEntity.Prefix + this.CustomerId;
+
+        [JsonIgnore]
+        public string EntityOrderId => OrderEntity.Prefix + this.CustomerId;
     }
 }
