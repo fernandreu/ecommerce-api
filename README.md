@@ -4,11 +4,14 @@ This is a REST API demo developed as part of the *.NET Software Engineer Technic
 
 ## General overview
 
-## Consuming the API
-
 The API is deployed to a public AWS Lambda accessible at the following location:
 
 https://jzjexhjx9i.execute-api.eu-west-1.amazonaws.com/Prod/
+
+The REST API is built using ASP.NET Core 2.1 (i.e. the latest version supported by AWS Lambda). Internally, it uses a 
+DynamoDB database to store all data, and a CloudFormation template to create / update all the infrastructure.
+
+## Consuming the API
 
 Navigation through the API should mostly be self-explanatory, as every page directly provides you with the links you need to
 use to navigate to child elements. Nevertheless, all the API endpoints are summarised below.
@@ -145,6 +148,7 @@ Response body example:
     - If an order with that ID already exists, **all** its contents will be replaced
     - The request body must contain at least one product
     - The `orderId` and / or `requiredMinWidth` properties will be ignored when specified as part of the request body
+    - For the purposes of this demo, there are no error checks performed for the `date` field
 
 Request body example:
 
@@ -176,7 +180,6 @@ Response body example:
 }
 ```
 
-
 ## Testing the API locally
 
 To test the API in your local machine, you will need to have a DynamoDB instance running first with the sharedDb
@@ -195,7 +198,8 @@ docker start dynamodb
 After this, open the project on Visual Studio 2017 and run the `IIS Express` profile. This should automatically
 start IIS and open a new browser pointing to the local API url in http://localhost:55435/ .
 
-### Unit / integration tests
+
+## Unit / integration tests
 
 The solution includes several unit and integration tests under the `ManufacturingAPI.UnitTests` and 
 `ManufacturingAPI.IntegrationTests` projects respectively. These should be considered as a proof of concept, as 
@@ -209,6 +213,7 @@ have focused on ensuring that the different API endpoints can be called correctl
 
 The testing framework of choice was `xUnit` for both unit and integration tests.
 
+
 ## CI / CD
 
 This project is integrated with Azure Pipelines:
@@ -220,3 +225,43 @@ On push, the app is built and tested. If these steps are successful, the lambda 
 **Due to time constraints, only unit tests (and not integration tests) are automated through the pipeline.** For the
 same reason, no automated testing of the web app in a production-like environment takes place before the final release
 into production.
+
+
+## DynamoDB architecture
+
+Following [Amazon's best practises for DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-general-nosql-design.html),
+only one table has been used for this demo. The list of access patterns needed is significantly small, and hence the 
+design of this single table can also be very simple. However, in anticipation of additional access patterns which 
+might be implemented in future iterations of this demo, the following design has been adopted:
+
+- Three main columns are used for all table entries: `PK` (partition key), `SK` (sort key) and `Data`
+- `PK` and `SK` conform the compount primary key of the table
+- `SK` and `Data` conform the compount primary key (partition and sort respectively) of a Global Secondary Index (GSI)
+- Each customer constitutes an individual table entry:
+    - The `PK` column holds the customer's ID preceded by a `CUSTOMER-` prefix (e.g. `CUSTOMER-1`)
+    - The `SK` column holds the customer's contact name
+    - The `Data` column holds the customer's address
+- Each order constitutes an individual table entry:
+    - The `PK` column holds the order's ID preceded by an `ORDER-` prefix (e.g. `ORDER-1`)
+    - The `SK` column holds the ID of the customer who placed the order (also with the `CUSTOMER-` prefix)
+    - The `Data` column holds the order's date
+- Given that there is no need to query any property of the order's products, these have been stored as part of the
+  orders and not as individual entries
+
+When querying / manipulating entries in the table, the demo uses the Object Persistence Model from the AWS SDK. As part
+of this, the format described above for customers and orders can be seen in the attributes of the `CustomerEntity` and
+`OrderEntity` classes respectively.
+
+
+## Further work
+
+The following list just shows a few examples of possible additions to the demo but are considered out of scope at this
+stage:
+
+- Add sort / search options to the `GetAllCustomers` / `GetAllOrders` routes
+- Enabe authentication / authorization
+- Configure Api versioning
+- Allow creating orders with `POST` actions without specifying their ID
+- Allow partial updates of customer / order properties (e.g. changing order status from dispatched to delivered)
+- Allow creating customers
+- Send confirmation email to customers upon account creation / email address update (for example using [AWS SES](https://aws.amazon.com/ses/))
