@@ -14,9 +14,9 @@ DynamoDB database to store all data, and a CloudFormation template to create / u
 ## Consuming the API
 
 Navigation through the API should mostly be self-explanatory, as every page directly provides you with the links you need to
-use to navigate to child elements. Nevertheless, all the API endpoints are summarised below.
+use to navigate to child elements. Nevertheless, all the API endpoints are summarised in this section.
 
-For clarity, the navigation links have been removed from all the response body examples below.
+For clarity, the navigation links have been removed from all the response body examples.
 
 ### See the full list of customers
 
