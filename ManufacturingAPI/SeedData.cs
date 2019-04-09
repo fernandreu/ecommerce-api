@@ -38,16 +38,24 @@ namespace ManufacturingAPI
             {
                 CustomerId = CustomerEntity.Prefix + "TEST",
                 ContactName = "John Doe",
+                Address = "Amsterdam",
+            };
+
+            var normalCustomer = new CustomerEntity
+            {
+                CustomerId = CustomerEntity.Prefix + "1",
+                ContactName = "Fernando Andreu",
                 Address = "Glasgow",
             };
 
             await context.SaveAsync(testCustomer);
+            await context.SaveAsync(normalCustomer);
 
             await context.SaveAsync(new OrderEntity
             {
                 OrderId = OrderEntity.Prefix + "1",
                 CustomerId = testCustomer.CustomerId,
-                OrderDate = "2019/04/18",
+                OrderDate = "2019/04/07",
                 Products = new List<Product>
                 {
                     new Product { ProductType = "photoBook", Quantity = 1 },
@@ -59,7 +67,24 @@ namespace ManufacturingAPI
             {
                 OrderId = OrderEntity.Prefix + "2",
                 CustomerId = testCustomer.CustomerId,
-                OrderDate = "2019/04/19",
+                OrderDate = "2019/04/08",
+                Products = new List<Product>
+                {
+                    new Product { ProductType = "calendar", Quantity = 1 },
+                    new Product { ProductType = "canvas", Quantity = 2 },
+                }
+            });
+
+            await context.SaveAsync(new OrderEntity
+            {
+                OrderId = OrderEntity.Prefix + "3",
+                CustomerId = normalCustomer.CustomerId,
+                OrderDate = "2019/04/08",
+                Products = new List<Product>
+                {
+                    new Product { ProductType = "mug", Quantity = 1 },
+                    new Product { ProductType = "cards", Quantity = 4 },
+                }
             });
         }
     }
