@@ -16,24 +16,57 @@ namespace ManufacturingAPI.Services
             ["canvas"] = new ProductDetails(16.0),
             ["cards"] = new ProductDetails(4.7),
             ["mug"] = new ProductDetails(94.0, 4),
-        }; 
+        };
 
-        public bool IsValidProduct(string productType)
+        public bool IsValidProductList(IEnumerable<Product> products, out string errorMessage)
         {
-            return productType != null && this.validProducts.ContainsKey(productType);
+            var productList = products?.ToList();
+
+            if (productList == null || productList.Count == 0)
+            {
+                errorMessage = "The list of products cannot be null or empty";
+                return false;
+            }
+
+            foreach (var product in productList)
+            {
+                if (product.ProductType == null)
+                {
+                    errorMessage = "The ProductType was not specified";
+                    return false;
+                }
+
+                if (!this.validProducts.ContainsKey(product.ProductType))
+                {
+                    errorMessage = $"Invalid product type: {product.ProductType}";
+                    return false;
+                }
+
+                if (product.Quantity < 1)
+                {
+                    errorMessage = "The Quantity must be positive";
+                    return false;
+                }
+            }
+
+            errorMessage = null;
+            return true;
         }
 
         public double CalculateRequiredWidth(IEnumerable<Product> products)
         {
+            var productList = products.ToList();
+
+            if (!this.IsValidProductList(productList, out var error))
+            {
+                throw new ArgumentException(error);
+            }
+
             // Combine all products of the same type (just in case they are not all specified at once)
             var dict = new Dictionary<ProductDetails, int>();
-            foreach (var product in products)
+            foreach (var product in productList)
             {
-                if (product.ProductType == null || !this.validProducts.TryGetValue(product.ProductType, out var details))
-                {
-                    throw new ArgumentException($"Invalid product type: {product.ProductType}");
-                }
-                
+                var details = this.validProducts[product.ProductType];
                 var count = dict.GetValueOrDefault(details, 0);
                 dict[details] = count + product.Quantity;
             }
@@ -47,7 +80,7 @@ namespace ManufacturingAPI.Services
 
             return result;
         }
-
+        
         private class ProductDetails
         {
             public ProductDetails(double requiredWidth, int maxStack = 1)
@@ -60,6 +93,5 @@ namespace ManufacturingAPI.Services
 
             public int MaxStack { get; }
         }
-
     }
 }

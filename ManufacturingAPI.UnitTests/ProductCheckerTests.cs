@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 using ManufacturingAPI.Models;
 using ManufacturingAPI.Services;
@@ -20,20 +21,42 @@ namespace ManufacturingAPI.UnitTests
         public void ValidProductTypesShouldReturnTrue()
         {
             // Arrange
-            var validProducts = new List<string> { "photoBook", "calendar", "canvas", "cards", "mug" };
+            var productTypes = new List<string> { "photoBook", "calendar", "canvas", "cards", "mug" };
+            var products = productTypes.Select(x => new Product { ProductType = x, Quantity = 1 });
 
-            // Act / assert
-            validProducts.ForEach(p => Assert.True(this.productChecker.IsValidProduct(p)));
+            // Act
+            var valid = this.productChecker.IsValidProductList(products, out var error);
+
+            // Assert
+            Assert.True(valid, error);
         }
 
         [Fact]
         public void InvalidProductTypesShouldReturnFalse()
         {
             // Arrange
-            var validProducts = new List<string> { "PhotoBook", "photobook", "CALENDAR", "mugs" };
+            var productTypes = new List<string> { "PhotoBook", "photobook", "CALENDAR", "mugs" };
+            var products = productTypes.Select(x => new Product { ProductType = x, Quantity = 1 });
+            
+            // Act
+            var valid = this.productChecker.IsValidProductList(products, out _);
 
+            // Assert
+            Assert.False(valid);
+        }
+        
+        [Fact]
+        public void WrongQuantitiesShouldBeInvalid()
+        {
+            // Arrange
+            var products = new List<Product>
+            {
+                new Product { ProductType = "photoBook", Quantity = 0 },
+                new Product { ProductType = "calendar", Quantity = -1 },
+            };
+            
             // Act / assert
-            validProducts.ForEach(p => Assert.False(this.productChecker.IsValidProduct(p)));
+            products.ForEach(p => Assert.False(this.productChecker.IsValidProductList(new[] { p }, out _)));
         }
 
         [Fact]

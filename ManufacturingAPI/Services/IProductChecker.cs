@@ -14,7 +14,7 @@ namespace ManufacturingAPI.Services
     /// </summary>
     public interface IProductChecker
     {
-        bool IsValidProduct(string productType);
+        bool IsValidProductList(IEnumerable<Product> products, out string errorMessage);
 
         double CalculateRequiredWidth(IEnumerable<Product> products);
     }

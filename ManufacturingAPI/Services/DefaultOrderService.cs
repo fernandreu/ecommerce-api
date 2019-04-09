@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -66,17 +67,12 @@ namespace ManufacturingAPI.Services
         {
             if (await this.customerService.GetCustomerByIdAsync(customerId) == null)
             {
-                return null;
+                throw new ArgumentException("The clientId specified is invalid");
             }
 
-            if (order.Products == null)
+            if (!this.productChecker.IsValidProductList(order.Products, out var error))
             {
-                return null;
-            }
-
-            if (order.Products.Any(p => !this.productChecker.IsValidProduct(p.ProductType)))
-            {
-                return null;
+                throw new ArgumentException(error);
             }
 
             var orderEntity = new OrderEntity

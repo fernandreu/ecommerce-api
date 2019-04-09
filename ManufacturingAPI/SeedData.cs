@@ -25,15 +25,15 @@ namespace ManufacturingAPI
             await AddTestDataAsync(context);
         }
 
-        public static async Task AddTestDataAsync(IDynamoDBContext context)
+        public static async Task AddTestDataAsync(IDynamoDBContext context, bool force = true)
         {
             // Check if database already contains data, in which case we don't add anything
             var customers = await context.ScanAsync<CustomerEntity>(new List<ScanCondition>()).GetRemainingAsync();
-            if (customers.Any())
+            if (customers.Any() && !force)
             {
                 return;
             }
-            
+
             var testCustomer = new CustomerEntity
             {
                 CustomerId = CustomerEntity.Prefix + "TEST",

@@ -83,7 +83,7 @@ namespace ManufacturingAPI.IntegrationTests.Fixtures
         private async Task InitializeDatabaseAsync()
         {
             await this.EnsureTableIsActive();
-            await SeedData.AddTestDataAsync(this.Context);
+            await SeedData.AddTestDataAsync(this.Context, true);
         }
     }
 }

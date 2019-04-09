@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using ManufacturingAPI.Infrastructure;
@@ -57,13 +58,14 @@ namespace ManufacturingAPI.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<Order>> SaveOrder(string customerId, string orderId, [FromBody] Order order)
         {
-            var result = await this.orderService.SaveOrderAsync(customerId, orderId, order);
-            if (result == null)
+            try
             {
-                return this.BadRequest(new ApiError(400, "The order specified is invalid and cannot be saved"));
+                return await this.orderService.SaveOrderAsync(customerId, orderId, order);
             }
-
-            return result;
+            catch (ArgumentException exception)
+            {
+                return this.BadRequest(new ApiError(400, exception.Message));
+            }
         }
     }
 }
