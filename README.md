@@ -192,9 +192,19 @@ docker start dynamodb
 After this, open the project on Visual Studio 2017 and run the `IIS Express` profile. This should automatically
 start IIS and open a new browser pointing to the local API url in http://localhost:55435/ .
 
-### Unit tests
+### Unit / integration tests
 
-### Integration tests
+The solution includes several unit and integration tests under the `ManufacturingAPI.UnitTests` and 
+`ManufacturingAPI.IntegrationTests` projects respectively. These should be considered as a proof of concept, as 
+they do not provide full code coverage of the entire web app.
+
+The unit tests focus a key concept of the technical assessment: ensuring the minimum width required for
+an order is calculated correctly.
+
+The integration tests have access to both ASP.NET and AWS dependencies. Due to this, the example tests included 
+have focused on ensuring that the different API endpoints can be called correctly and give the expected results.
+
+The testing framework of choice was `xUnit` for both unit and integration tests.
 
 ## CI / CD
 
@@ -204,4 +214,6 @@ This project is integrated with Azure Pipelines:
 
 On push, the app is built and tested. If these steps are successful, the lambda will be deployed to AWS automatically.
 
-**Due to time constraints, only unit tests (and not integration tests) are automated through the pipeline.**
+*Due to time constraints, only unit tests (and not integration tests) are automated through the pipeline. For the
+same reason, no automated testing of the web app in a production-like environment takes place before the final release
+into production.*
