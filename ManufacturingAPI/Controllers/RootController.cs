@@ -9,7 +9,11 @@ namespace ManufacturingAPI.Controllers
         [HttpGet]
         public object Index()
         {
-            return new { message = "Blubb" };
+            return new
+            {
+                Customers = "TODO/Link/To/Customers",
+                Orders = "TODO/Link/To/Orders",
+            };
         }
     }
 }

@@ -47,8 +47,6 @@ steps:
 #     artifactName: 'artifact' 
 #     publishLocation: 'Container'
 
-# The following are WIP tasks below are for deployment of the lambda
-
 - task: LambdaNETCoreDeploy@1
   displayName: 'Deploy Lambda'
   inputs:
@@ -58,12 +56,3 @@ steps:
     lambdaProjectPath: '$(Build.SourcesDirectory)/ManufacturingAPI/ManufacturingAPI.csproj'
     stackName: ManufacturingApiStack
     s3Bucket: 'manufacturing-api-eu-ireland'
-
-# Install AWS CLI through pip
-# - task: UsePythonVersion@0
-#   inputs:
-#     versionSpec: '3.x'
-#     architecture: 'x64'
-
-# - script: 'pip install setuptools && pip install wheel && pip install awscli --upgrade'
-#   displayName: 'Install AWS CLI'
