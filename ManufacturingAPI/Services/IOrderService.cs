@@ -1,10 +1,10 @@
-﻿namespace ManufacturingAPI.Services
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using ManufacturingAPI.Models;
+
+namespace ManufacturingAPI.Services
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-
-    using ManufacturingAPI.Models;
-
     public interface IOrderService
     {
         Task<IEnumerable<Order>> GetAllOrdersAsync(string customerId);

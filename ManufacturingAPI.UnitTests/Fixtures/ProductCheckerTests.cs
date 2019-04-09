@@ -6,7 +6,7 @@ using ManufacturingAPI.Services;
 
 using Xunit;
 
-namespace ManufacturingAPI.UnitTests
+namespace ManufacturingAPI.UnitTests.Fixtures
 {
     public class ProductCheckerTests
     {

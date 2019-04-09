@@ -1,9 +1,6 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using ManufacturingAPI.Models;
-
-using Microsoft.AspNetCore.Server.Kestrel.Https;
 
 using Xunit;
 

@@ -1,8 +1,5 @@
-using System;
-
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-using Amazon.Runtime;
 
 using AutoMapper;
 
