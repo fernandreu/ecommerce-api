@@ -14,6 +14,9 @@ namespace ManufacturingAPI
 
     using Microsoft.Extensions.DependencyInjection;
 
+    /// <summary>
+    /// Handles the creation of dummy Customer / Order entries at the start of the application
+    /// </summary>
     public static class SeedData
     {
         public static async Task InitializeAsync(IServiceProvider services)

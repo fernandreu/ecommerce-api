@@ -13,8 +13,6 @@ namespace ManufacturingAPI.IntegrationTests.Fixtures
 {
     public class FixtureParent : IDisposable
     {
-        ////public readonly IConfigurationRoot Configuration;
-
         public readonly IAmazonDynamoDB Client;
 
         public readonly IDynamoDBContext Context;

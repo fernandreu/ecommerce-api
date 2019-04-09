@@ -5,7 +5,7 @@ using ManufacturingAPI.Models;
 namespace ManufacturingAPI.Services
 {
     /// <summary>
-    /// Contains several methods to ensure the validity of a (series of) product(s).
+    /// Contains several methods to ensure the validity of a list of products.
     /// The idea is that this might come from a different location in the future (e.g. from the DynamoDB
     /// database), and hence better to have these methods decoupled from the start
     /// </summary>

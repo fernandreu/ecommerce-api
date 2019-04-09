@@ -5,6 +5,9 @@ using ManufacturingAPI.Models;
 
 namespace ManufacturingAPI.Services
 {
+    /// <summary>
+    /// Contains several methods to perform CRUD operations with Order entries
+    /// </summary>
     public interface IOrderService
     {
         Task<IEnumerable<Order>> GetAllOrdersAsync(string customerId);

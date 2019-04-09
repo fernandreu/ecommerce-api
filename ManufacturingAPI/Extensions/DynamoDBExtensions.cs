@@ -10,6 +10,11 @@ namespace ManufacturingAPI.Extensions
 {
     public static class DynamoDbExtensions
     {
+        /// <summary>
+        /// Creates a DynamoDB table, following the same structure as defined in the AWS CloudFormation template
+        /// </summary>
+        /// <param name="client">The DynamoDB client that will be used to create the table</param>
+        /// <returns>An awaitable task</returns>
         public static async Task CreateMainTableAsync(this IAmazonDynamoDB client)
         {
             var keySchema = new List<KeySchemaElement>
