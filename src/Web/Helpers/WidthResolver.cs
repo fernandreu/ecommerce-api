@@ -12,10 +12,10 @@ namespace ECommerceAPI.Web.Helpers
         private readonly IProductChecker productChecker;
 
         // TODO: This method is only here due to errors with the dependency injection, and should be removed as soon as possible
-        ////public WidthResolver()
-        ////{
-        ////    this.productChecker = new ProductChecker();
-        ////}
+        public WidthResolver()
+        {
+            this.productChecker = new ProductChecker();
+        }
 
         public WidthResolver(IProductChecker productChecker)
         {
