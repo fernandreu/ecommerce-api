@@ -39,12 +39,12 @@ namespace ECommerceAPI.Infrastructure.Extensions
                 services.AddAWSService<IAmazonDynamoDB>();
             }
 
-            services.AddAutoMapper(options =>
-            {
-                options.AddProfile<EntryMappingProfile>();
-            });
-
             return services;
+        }
+
+        public static void AddInfrastructureProfile(this IMapperConfigurationExpression options)
+        {
+            options.AddProfile<EntryMappingProfile>();
         }
     }
 }

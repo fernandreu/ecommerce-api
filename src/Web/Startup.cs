@@ -4,6 +4,7 @@ using ECommerceAPI.ApplicationCore.Entities;
 using ECommerceAPI.ApplicationCore.Interfaces;
 using ECommerceAPI.Infrastructure.Data;
 using ECommerceAPI.Infrastructure.Extensions;
+using ECommerceAPI.Infrastructure.Services;
 using ECommerceAPI.Web.Filters;
 using ECommerceAPI.Web.Helpers;
 using ECommerceAPI.Web.Interfaces;
@@ -15,6 +16,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
 namespace ECommerceAPI.Web
 {
@@ -42,9 +45,10 @@ namespace ECommerceAPI.Web
                 options.Filters.Add<LinkRewritingFilter>();
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddAutoMapper(options =>
+            services.AddAutoMapper((provider, options) =>
             {
-                options.AddProfile<ResourceMappingProfile>();
+                options.AddProfile(new ResourceMappingProfile(provider.GetService<IProductChecker>()));
+                options.AddInfrastructureProfile();
             });
 
             services.Configure<ApiBehaviorOptions>(options =>
