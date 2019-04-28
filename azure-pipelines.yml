@@ -53,6 +53,6 @@ steps:
     awsCredentials: AWS
     regionName: 'eu-west-1'
     command: deployServerless
-    lambdaProjectPath: '$(Build.SourcesDirectory)/src/Web.csproj'
+    lambdaProjectPath: '$(Build.SourcesDirectory)/src/Web/Web.csproj'
     stackName: ECommerceAPIStack
     s3Bucket: 'ecommerce-api-eu-ireland'
