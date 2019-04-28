@@ -13,7 +13,7 @@
 		"AspNetCoreFunction" : {
 			"Type" : "AWS::Serverless::Function",
 			"Properties": {
-			    "Handler": "ManufacturingAPI::ManufacturingAPI.LambdaEntryPoint::FunctionHandlerAsync",
+			    "Handler": "ECommerceAPI::ECommerceAPI.LambdaEntryPoint::FunctionHandlerAsync",
 			    "Runtime": "dotnetcore2.1",
 			    "CodeUri": "",
 			    "MemorySize": 256,
@@ -45,7 +45,7 @@
         "MainTable": {
             "Type": "AWS::DynamoDB::Table",
             "Properties": { 
-                "TableName" : "ManufacturingApi",
+                "TableName" : "ECommerceAPI",
                 "KeySchema" : [
                     {
                         "AttributeName" : "PK",
