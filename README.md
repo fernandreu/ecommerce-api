@@ -215,7 +215,7 @@ The testing framework of choice was `xUnit` for both unit and integration tests.
 
 This project is integrated with Azure Pipelines:
 
-[![Build Status](https://dev.azure.com/fernandreu-public/ManufacturingAPI/_apis/build/status/ManufacturingAPI-CI?branchName=master)](https://dev.azure.com/fernandreu-public/ManufacturingAPI/_build/latest?definitionId=4&branchName=master)
+[![Build Status](https://dev.azure.com/fernandreu-public/ECommerceAPI/_apis/build/status/fernandreu.ecommerce-api?branchName=master)](https://dev.azure.com/fernandreu-public/ECommerceAPI/_build/latest?definitionId=5&branchName=master)
 
 On push, the app is built and tested. If these steps are successful, the lambda will be deployed to AWS automatically.
 
