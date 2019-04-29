@@ -17,8 +17,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using IConfigurationProvider = AutoMapper.IConfigurationProvider;
-
 namespace ECommerceAPI.Web
 {
     public class Startup
