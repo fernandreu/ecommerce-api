@@ -1,12 +1,9 @@
 # Manufacturing API
 
-This is a REST API demo developed as part of the *.NET Software Engineer Technical Assignment (Manufacturing)* for albelli.  
+This is a Proof of Concept of a typical e-commerce REST API, which is deployed to a public AWS Lambda accessible at 
+the following location:
 
-## General overview
-
-The API is deployed to a public AWS Lambda accessible at the following location:
-
-https://jzjexhjx9i.execute-api.eu-west-1.amazonaws.com/Prod/
+https://9k4lggrxmk.execute-api.eu-west-1.amazonaws.com/Prod/
 
 The REST API is built using ASP.NET Core 2.1 (i.e. the latest version supported by AWS Lambda). Internally, it uses a 
 DynamoDB database to store all data, and a CloudFormation template to create / update all the infrastructure.
@@ -34,8 +31,8 @@ Response body example:
     "value": [
         {
             "customerId": "TEST",
-            "contactName": "Fernando Andreu",
-            "address": "Glasgow"
+            "contactName": "Michael Parker",
+            "address": "New York"
         },
         {
             "customerId": "1",
