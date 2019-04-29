@@ -10,9 +10,9 @@
     "region"      : "eu-west-1",
     "configuration" : "Release",
     "framework"     : "netcoreapp2.1",
-    "s3-prefix"     : "ManufacturingAPI/",
+    "s3-prefix"     : "ECommerceAPI/",
     "template"      : "serverless.template",
     "template-parameters" : "\"ShouldCreateBucket\"=\"true\";\"BucketName\"=\"\"",
-    "s3-bucket"           : "manufacturing-api-eu-ireland",
-    "stack-name"          : "ManufacturingApiStack"
+    "s3-bucket"           : "ecommerce-api-eu-ireland",
+    "stack-name"          : "ECommerceApiStack"
 }

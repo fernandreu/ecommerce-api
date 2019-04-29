@@ -2,7 +2,7 @@
 {
     public class MainTable
     {
-        public const string Name = "ManufacturingApi";
+        public const string Name = "ECommerceAPI";
 
         public const string PartitionKey = "PK";
 

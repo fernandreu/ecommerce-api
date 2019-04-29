@@ -13,7 +13,7 @@
 		"AspNetCoreFunction" : {
 			"Type" : "AWS::Serverless::Function",
 			"Properties": {
-			    "Handler": "ECommerceAPI::ECommerceAPI.LambdaEntryPoint::FunctionHandlerAsync",
+			    "Handler": "ECommerceAPI::ECommerceAPI.Web.LambdaEntryPoint::FunctionHandlerAsync",
 			    "Runtime": "dotnetcore2.1",
 			    "CodeUri": "",
 			    "MemorySize": 256,
