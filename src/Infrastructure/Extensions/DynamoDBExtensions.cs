@@ -52,18 +52,11 @@ namespace ECommerceAPI.Infrastructure.Extensions
                 GlobalSecondaryIndexes = { gsi }
             };
 
-            try
+            // If the table exists, delete it first
+            var tables = await client.ListTablesAsync();
+            if (tables.TableNames.Contains(MainTable.Name))
             {
-                // If the table exists, delete it first
-                var tables = await client.ListTablesAsync();
-                if (tables.TableNames.Contains(MainTable.Name))
-                {
-                    await client.DeleteTableAsync(MainTable.Name);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Exception: {e.Message}; {e.StackTrace}");
+                await client.DeleteTableAsync(MainTable.Name);
             }
 
             await client.CreateTableAsync(request);

@@ -41,8 +41,7 @@ namespace ECommerceAPI.Web
 
                 try
                 {
-                    SeedData.InitializeAsync(services).Wait();
-                    ////SeedData.AddTestDataAsync(services.GetRequiredService<IDynamoDBContext>()).Wait();
+                    SeedData.AddTestDataAsync(services.GetRequiredService<IDynamoDBContext>()).Wait();
                 }
                 catch (Exception ex)
                 {
