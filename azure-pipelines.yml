@@ -32,13 +32,19 @@ steps:
     projects: '**/*UnitTests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
-# TODO: This does not work (yet) due to a 404 error when seeding the DynamoDB database
-# - task: DotNetCoreCLI@2
-#   displayName: Run Integration Tests
-#   inputs:
-#     command: test
-#     projects: '**/*IntegrationTests/*.csproj'
-#     arguments: '--configuration $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  displayName: Run Integration Tests
+  inputs:
+    command: test
+    projects: '**/*IntegrationTests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+    
+- task: DotNetCoreCLI@2
+  displayName: Run Functional Tests
+  inputs:
+    command: test
+    projects: '**/*FunctionalTests/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
 
 # - task: PublishBuildArtifacts@1
 #   displayName: Publish Artifacts
