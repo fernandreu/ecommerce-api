@@ -1,5 +1,6 @@
 using System;
 
+using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 
 using ECommerceAPI.Infrastructure.Data;
@@ -37,6 +38,14 @@ namespace ECommerceAPI.Web
             using (var scope = webHost.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+                
+                var logger = services.GetRequiredService<ILogger<LambdaEntryPoint>>();
+                logger.LogError("Prior to getting client");
+                
+                var client = services.GetRequiredService<IAmazonDynamoDB>();
+                logger.LogError("After getting client");
+                logger.LogError($"Client region: {client.Config.RegionEndpoint.DisplayName}");
+                throw new Exception($"client: {client.Config.RegionEndpoint.DisplayName}");
 
                 try
                 {
@@ -44,7 +53,6 @@ namespace ECommerceAPI.Web
                 }
                 catch (Exception ex)
                 {
-                    var logger = services.GetRequiredService<ILogger<LambdaEntryPoint>>();
                     logger.LogError(ex, "An error occurred seeding the database.");
                 }
             }
