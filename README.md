@@ -198,8 +198,8 @@ start IIS and open a new browser pointing to the local API url in http://localho
 
 ## Unit / integration tests
 
-The solution includes several unit and integration tests under the `ManufacturingAPI.UnitTests` and 
-`ManufacturingAPI.IntegrationTests` projects respectively. These should be considered as a proof of concept, as 
+The solution includes several unit, integration and functional tests under the corresponding `UnitTests`, 
+`IntegrationTests` and `FunctionalTests` projects. These should be considered as a proof of concept, as 
 they do not provide full code coverage of the entire web app.
 
 The unit tests focus a key concept of the technical assessment: ensuring the minimum width required for
