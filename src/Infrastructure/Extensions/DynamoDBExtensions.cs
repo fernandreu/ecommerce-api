@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Amazon.DynamoDBv2;
@@ -50,12 +51,19 @@ namespace ECommerceAPI.Infrastructure.Extensions
                 KeySchema = keySchema,
                 GlobalSecondaryIndexes = { gsi }
             };
-            
-            // If the table exists, delete it first
-            var tables = await client.ListTablesAsync();
-            if (tables.TableNames.Contains(MainTable.Name))
+
+            try
             {
-                await client.DeleteTableAsync(MainTable.Name);
+                // If the table exists, delete it first
+                var tables = await client.ListTablesAsync();
+                if (tables.TableNames.Contains(MainTable.Name))
+                {
+                    await client.DeleteTableAsync(MainTable.Name);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Exception: {e.Message}; {e.StackTrace}");
             }
 
             await client.CreateTableAsync(request);
