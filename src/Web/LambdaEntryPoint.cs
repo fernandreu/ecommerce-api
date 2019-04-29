@@ -1,5 +1,6 @@
 using System;
 
+using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 
 using ECommerceAPI.Infrastructure.Data;
@@ -37,6 +38,9 @@ namespace ECommerceAPI.Web
             using (var scope = webHost.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+                
+                var client = services.GetRequiredService<IAmazonDynamoDB>();
+                throw new Exception($"client: {client.Config.RegionEndpoint.DisplayName}");
 
                 try
                 {
