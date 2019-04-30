@@ -1,14 +1,10 @@
 using AutoMapper;
 
-using ECommerceAPI.ApplicationCore.Entities;
 using ECommerceAPI.ApplicationCore.Interfaces;
-using ECommerceAPI.Infrastructure.Data;
 using ECommerceAPI.Infrastructure.Extensions;
-using ECommerceAPI.Infrastructure.Services;
 using ECommerceAPI.Web.Filters;
 using ECommerceAPI.Web.Helpers;
 using ECommerceAPI.Web.Interfaces;
-using ECommerceAPI.Web.Resources;
 using ECommerceAPI.Web.Services;
 
 using Microsoft.AspNetCore.Builder;

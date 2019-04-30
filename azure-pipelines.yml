@@ -39,12 +39,12 @@ steps:
     projects: '**/*IntegrationTests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
     
-- task: DotNetCoreCLI@2
-  displayName: Run Functional Tests
-  inputs:
-    command: test
-    projects: '**/*FunctionalTests/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+# - task: DotNetCoreCLI@2
+#   displayName: Run Functional Tests
+#   inputs:
+#     command: test
+#     projects: '**/*FunctionalTests/*.csproj'
+#     arguments: '--configuration $(buildConfiguration)'
 
 # - task: PublishBuildArtifacts@1
 #   displayName: Publish Artifacts
