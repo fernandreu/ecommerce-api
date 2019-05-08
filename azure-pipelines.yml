@@ -18,7 +18,7 @@ steps:
 - powershell: Write-Host "##vso[task.setvariable variable=AWS_ACCESS_KEY_ID;]$(AWS_ACCESS_KEY_ID)"
   displayName: Pass AWS secret variables to environment
 
-- powershell: echo "##vso[task.setvariable variable=AWS_SECRET_ACCESS_KEY;]$(AWS_SECRET_ACCESS_KEY)"
+- powershell: Write-Host "##vso[task.setvariable variable=AWS_SECRET_ACCESS_KEY;]$(AWS_SECRET_ACCESS_KEY)"
   displayName: Pass AWS secret variables to environment
     
 # Some .NET Core SDK come pre-installed with the agents, and hence this is usually not needed
