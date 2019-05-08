@@ -33,7 +33,7 @@ namespace ECommerceAPI.Web
             builder.UseStartup<Startup>();
         }
 
-        protected override void PostCreateWebHost(IWebHost webHost)
+        protected override async void PostCreateWebHost(IWebHost webHost)
         {
             using (var scope = webHost.Services.CreateScope())
             {
@@ -41,7 +41,7 @@ namespace ECommerceAPI.Web
 
                 try
                 {
-                    SeedData.AddTestDataAsync(services.GetRequiredService<IDynamoDBContext>()).Wait();
+                    await SeedData.AddTestDataAsync(services.GetRequiredService<IDynamoDBContext>());
                 }
                 catch (Exception ex)
                 {

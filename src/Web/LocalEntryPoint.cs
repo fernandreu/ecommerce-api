@@ -1,5 +1,5 @@
 using System;
-
+using System.Threading.Tasks;
 using ECommerceAPI.Infrastructure.Data;
 
 using Microsoft.AspNetCore;
@@ -14,10 +14,10 @@ namespace ECommerceAPI.Web
     /// </summary>
     public class LocalEntryPoint
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var host = CreateWebHost(args);
-            InitializeDatabase(host);
+            await InitializeDatabaseAsync(host);
             host.Run();
         }
 
@@ -26,7 +26,7 @@ namespace ECommerceAPI.Web
                 .UseStartup<Startup>()
                 .Build();
 
-        public static void InitializeDatabase(IWebHost host)
+        public static async Task InitializeDatabaseAsync(IWebHost host)
         {
             using (var scope = host.Services.CreateScope())
             {
@@ -34,7 +34,7 @@ namespace ECommerceAPI.Web
 
                 try
                 {
-                    SeedData.InitializeAsync(services).Wait();
+                    await SeedData.InitializeAsync(services);
                 }
                 catch (Exception ex)
                 {
