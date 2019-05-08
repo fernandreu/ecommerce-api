@@ -16,7 +16,7 @@ variables:
 steps:
 
 - script: |
-    echo "##vso[task.setvariable variable=AWS_ACCESS_KEY_ID;]%ID%
+    echo "##vso[task.setvariable variable=AWS_ACCESS_KEY_ID;]%ID%"
     echo "##vso[task.setvariable variable=AWS_SECRET_ACCESS_KEY;]%KEY%"
   displayName: Pass AWS secret variables to environment
   env:
