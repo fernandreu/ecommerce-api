@@ -219,10 +219,6 @@ This project is integrated with Azure Pipelines:
 
 On push, the app is built and tested. If these steps are successful, the lambda will be deployed to AWS automatically.
 
-**Due to time constraints, only unit tests (and not integration tests) are automated through the pipeline.** For the
-same reason, no automated testing of the web app in a production-like environment takes place before the final release
-into production.
-
 
 ## DynamoDB architecture
 
