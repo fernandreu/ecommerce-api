@@ -29,6 +29,7 @@ namespace ECommerceAPI.Web
         {
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IProductTypeService, ProductTypeService>();
 
             // Extension method in Infrastructure project
             services.AddInfrastructure(Configuration);
