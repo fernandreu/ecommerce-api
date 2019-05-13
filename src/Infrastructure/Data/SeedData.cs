@@ -37,6 +37,39 @@ namespace ECommerceAPI.Infrastructure.Data
                 return;
             }
 
+            // Add ProductTypes
+            var id = 0;
+            await context.SaveAsync(new ProductTypeEntry
+            {
+                Id = ProductTypeEntry.Prefix + ++id,
+                Name = "photoBook",
+                Width = 19.0,
+            });
+            await context.SaveAsync(new ProductTypeEntry
+            {
+                Id = ProductTypeEntry.Prefix + ++id,
+                Name = "calendar",
+                Width = 10.0,
+            });
+            await context.SaveAsync(new ProductTypeEntry
+            {
+                Id = ProductTypeEntry.Prefix + ++id,
+                Name = "canvas",
+                Width = 16.0,
+            });
+            await context.SaveAsync(new ProductTypeEntry
+            {
+                Id = ProductTypeEntry.Prefix + ++id,
+                Name = "cards",
+                Width = 4.7,
+            });
+            await context.SaveAsync(new ProductTypeEntry
+            {
+                Id = ProductTypeEntry.Prefix + ++id,
+                Name = "mug",
+                Width = 94.0,
+            });
+
             var testCustomer = new CustomerEntry
             {
                 Id = CustomerEntry.Prefix + "TEST",

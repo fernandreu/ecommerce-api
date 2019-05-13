@@ -15,7 +15,5 @@ namespace ECommerceAPI.Web.Resources
         public string OrderDate { get; set; }
 
         public IList<Product> Products { get; set; }
-
-        public double RequiredBinWidth { get; set; }
     }
 }

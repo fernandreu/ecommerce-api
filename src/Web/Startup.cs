@@ -39,9 +39,9 @@ namespace ECommerceAPI.Web
                 options.Filters.Add<LinkRewritingFilter>();
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddAutoMapper((provider, options) =>
+            services.AddAutoMapper(options =>
             {
-                options.AddProfile(new ResourceMappingProfile(provider.GetService<IProductChecker>()));
+                options.AddProfile<ResourceMappingProfile>();
                 options.AddInfrastructureProfile();
             });
 

@@ -22,6 +22,12 @@ namespace ECommerceAPI.Infrastructure.Data
             this.CreateMap<OrderEntry, Order>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.Substring(OrderEntry.Prefix.Length)))
                 .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId.Substring(CustomerEntry.Prefix.Length)));
+            
+            this.CreateMap<ProductType, ProductTypeEntry>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => ProductTypeEntry.Prefix + src.Id));
+
+            this.CreateMap<ProductTypeEntry, ProductType>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.Substring(ProductTypeEntry.Prefix.Length)));
         }
     }
 }

@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using ECommerceAPI.ApplicationCore.Entities;
 using ECommerceAPI.ApplicationCore.Interfaces;
 using ECommerceAPI.Infrastructure.Services;
-
 using Xunit;
 
 namespace ECommerceAPI.UnitTests.Fixtures
@@ -15,39 +15,39 @@ namespace ECommerceAPI.UnitTests.Fixtures
 
         public ProductCheckerTests()
         {
-            this.productChecker = new ProductChecker();
+            this.productChecker = new ProductChecker(new MockProductTypeRepository());
         }
 
         [Fact]
-        public void ValidProductTypesShouldReturnTrue()
+        public async Task ValidProductTypesShouldReturnTrue()
         {
             // Arrange
             var productTypes = new List<string> { "photoBook", "calendar", "canvas", "cards", "mug" };
             var products = productTypes.Select(x => new Product { ProductType = x, Quantity = 1 });
 
             // Act
-            var valid = this.productChecker.IsValidProductList(products, out var error);
+            var (valid, error) = await this.productChecker.IsValidProductListAsync(products);
 
             // Assert
             Assert.True(valid, error);
         }
 
         [Fact]
-        public void InvalidProductTypesShouldReturnFalse()
+        public async Task InvalidProductTypesShouldReturnFalse()
         {
             // Arrange
             var productTypes = new List<string> { "PhotoBook", "photobook", "CALENDAR", "mugs" };
             var products = productTypes.Select(x => new Product { ProductType = x, Quantity = 1 });
             
             // Act
-            var valid = this.productChecker.IsValidProductList(products, out _);
+            var (valid, _) = await this.productChecker.IsValidProductListAsync(products);
 
             // Assert
             Assert.False(valid);
         }
         
         [Fact]
-        public void WrongQuantitiesShouldBeInvalid()
+        public async Task WrongQuantitiesShouldBeInvalid()
         {
             // Arrange
             var products = new List<Product>
@@ -57,11 +57,15 @@ namespace ECommerceAPI.UnitTests.Fixtures
             };
             
             // Act / assert
-            products.ForEach(p => Assert.False(this.productChecker.IsValidProductList(new[] { p }, out _)));
+            foreach (var p in products)
+            {
+                var (valid, _) = await this.productChecker.IsValidProductListAsync(new[] {p});
+                Assert.False(valid);
+            }
         }
 
         [Fact]
-        public void PackagingExampleOne()
+        public async Task PackagingExampleOne()
         {
             // Arrange
             var products = new[]
@@ -72,14 +76,14 @@ namespace ECommerceAPI.UnitTests.Fixtures
             };
 
             // Act
-            var width = this.productChecker.CalculateRequiredWidth(products);
+            var width = await this.productChecker.CalculateRequiredWidthAsync(products);
 
             // Assert
             Assert.Equal(19.0 + 10.0 * 2 + 94.0, width);
         }
 
         [Fact]
-        public void PackagingExampleTwo()
+        public async Task PackagingExampleTwo()
         {
             // Arrange
             var products = new[]
@@ -90,14 +94,14 @@ namespace ECommerceAPI.UnitTests.Fixtures
             };
 
             // Act
-            var width = this.productChecker.CalculateRequiredWidth(products);
+            var width = await this.productChecker.CalculateRequiredWidthAsync(products);
 
             // Assert
-            Assert.Equal(19.0 + 10.0 * 2 + 94.0, width);
+            Assert.Equal(19.0 + 10.0 * 2 + 94.0 * 4, width);
         }
 
         [Fact]
-        public void RepeatedProductTypesShouldNotAffectOutcome()
+        public async Task RepeatedProductTypesShouldNotAffectOutcome()
         {
             // Arrange
             var products = new[]
@@ -112,10 +116,56 @@ namespace ECommerceAPI.UnitTests.Fixtures
             };
 
             // Act
-            var width = this.productChecker.CalculateRequiredWidth(products);
+            var width = await this.productChecker.CalculateRequiredWidthAsync(products);
 
             // Assert
-            Assert.Equal(19.0 + 10.0 * 2 + 94.0 * 2, width);
+            Assert.Equal(19.0 + 10.0 * 2 + 94.0 * 6, width);
+        }
+
+        private class MockProductTypeRepository : IProductTypeRepository
+        {
+            private readonly Dictionary<string, double> productWidths = new Dictionary<string, double>
+            {
+                { "photoBook", 19.0 },
+                { "calendar", 10.0 },
+                { "canvas", 16.0 },
+                { "cards", 4.7 },
+                { "mug", 94.0 },
+            };
+
+            public Task<ProductType> GetByIdAsync(string id)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<IEnumerable<ProductType>> GetAllAsync()
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<ProductType> PutAsync(ProductType entity)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<ProductType> PostAsync(ProductType entity)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<ProductType> GetByNameAsync(string name)
+            {
+                if (!this.productWidths.ContainsKey(name))
+                {
+                    return Task.FromResult<ProductType>(null);
+                }
+
+                return Task.FromResult(new ProductType
+                {
+                    Name = name,
+                    Width = this.productWidths[name],
+                });
+            }
         }
     }
 }

@@ -67,7 +67,8 @@ namespace ECommerceAPI.Web.Services
                 throw new ArgumentException("The customerId specified is invalid");
             }
 
-            if (!this.productChecker.IsValidProductList(orderResource.Products, out var error))
+            var (valid, error) = await this.productChecker.IsValidProductListAsync(orderResource.Products);
+            if (!valid)
             {
                 throw new ArgumentException(error);
             }

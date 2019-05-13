@@ -23,6 +23,11 @@ namespace ECommerceAPI.Infrastructure.Entries
                 return CustomerEntry.Prefix;
             }
 
+            if (typeof(T) == typeof(ProductTypeEntry))
+            {
+                return ProductTypeEntry.Prefix;
+            }
+
             return null;
         }
     }
