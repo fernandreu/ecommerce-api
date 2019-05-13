@@ -1,5 +1,7 @@
 # Manufacturing API
 
+[![Build Status](https://dev.azure.com/fernandreu-public/ECommerceAPI/_apis/build/status/fernandreu.ecommerce-api?branchName=master)](https://dev.azure.com/fernandreu-public/ECommerceAPI/_build/latest?definitionId=5&branchName=master)
+
 This is a Proof of Concept of a typical e-commerce REST API, which is deployed to a public AWS Lambda accessible at 
 the following location:
 
@@ -209,15 +211,6 @@ The integration tests have access to both ASP.NET and AWS dependencies. Due to t
 have focused on ensuring that the different API endpoints can be called correctly and give the expected results.
 
 The testing framework of choice was `xUnit` for both unit and integration tests.
-
-
-## CI / CD
-
-This project is integrated with Azure Pipelines:
-
-[![Build Status](https://dev.azure.com/fernandreu-public/ECommerceAPI/_apis/build/status/fernandreu.ecommerce-api?branchName=master)](https://dev.azure.com/fernandreu-public/ECommerceAPI/_build/latest?definitionId=5&branchName=master)
-
-On push, the app is built and tested. If these steps are successful, the lambda will be deployed to AWS automatically.
 
 
 ## DynamoDB architecture
