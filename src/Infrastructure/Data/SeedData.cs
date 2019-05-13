@@ -39,36 +39,40 @@ namespace ECommerceAPI.Infrastructure.Data
 
             // Add ProductTypes
             var id = 0;
-            await context.SaveAsync(new ProductTypeEntry
+            var products = new[]
             {
-                Id = ProductTypeEntry.Prefix + ++id,
-                Name = "photoBook",
-                Width = 19.0,
-            });
-            await context.SaveAsync(new ProductTypeEntry
-            {
-                Id = ProductTypeEntry.Prefix + ++id,
-                Name = "calendar",
-                Width = 10.0,
-            });
-            await context.SaveAsync(new ProductTypeEntry
-            {
-                Id = ProductTypeEntry.Prefix + ++id,
-                Name = "canvas",
-                Width = 16.0,
-            });
-            await context.SaveAsync(new ProductTypeEntry
-            {
-                Id = ProductTypeEntry.Prefix + ++id,
-                Name = "cards",
-                Width = 4.7,
-            });
-            await context.SaveAsync(new ProductTypeEntry
-            {
-                Id = ProductTypeEntry.Prefix + ++id,
-                Name = "mug",
-                Width = 94.0,
-            });
+                new ProductTypeEntry
+                {
+                    Id = ProductTypeEntry.Prefix + ++id,
+                    Name = "photoBook",
+                    Width = 19.0,
+                },
+                new ProductTypeEntry
+                {
+                    Id = ProductTypeEntry.Prefix + ++id,
+                    Name = "calendar",
+                    Width = 10.0,
+                },
+                new ProductTypeEntry
+                {
+                    Id = ProductTypeEntry.Prefix + ++id,
+                    Name = "canvas",
+                    Width = 16.0,
+                },
+                new ProductTypeEntry
+                {
+                    Id = ProductTypeEntry.Prefix + ++id,
+                    Name = "cards",
+                    Width = 4.7,
+                },
+                new ProductTypeEntry
+                {
+                    Id = ProductTypeEntry.Prefix + ++id,
+                    Name = "mug",
+                    Width = 94.0,
+                }
+            };
+            await Task.WhenAll(products.Select(p => context.SaveAsync(p)));
 
             var testCustomer = new CustomerEntry
             {
