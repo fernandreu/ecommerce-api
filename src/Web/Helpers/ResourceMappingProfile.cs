@@ -19,7 +19,8 @@ namespace ECommerceAPI.Web.Helpers
             this.CreateMap<Order, OrderResource>()
                 .ForMember(dest => dest.Self, opt => opt.MapFrom(src => Link.To(nameof(OrdersController.GetOrderById), new {customerId = src.CustomerId, orderId = src.Id})));
                 
-            this.CreateMap<ProductType, ProductTypeResource>();
+            this.CreateMap<ProductType, ProductTypeResource>()
+                .ForMember(dest => dest.Self, opt => opt.MapFrom(src => Link.To(nameof(ProductTypesController.GetProductTypeByName), new { name = src.Name })));
         }
     }
 }
