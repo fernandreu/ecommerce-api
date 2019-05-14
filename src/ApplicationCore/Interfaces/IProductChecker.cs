@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
-
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using ECommerceAPI.ApplicationCore.Entities;
+using ECommerceAPI.ApplicationCore.Logistics;
 
 namespace ECommerceAPI.ApplicationCore.Interfaces
 {
@@ -11,8 +13,8 @@ namespace ECommerceAPI.ApplicationCore.Interfaces
     /// </summary>
     public interface IProductChecker
     {
-        bool IsValidProductList(IEnumerable<Product> products, out string errorMessage);
+        Task<(bool valid, string error)> IsValidProductListAsync(IEnumerable<Product> products);
 
-        double CalculateRequiredWidth(IEnumerable<Product> products);
+        Task<OrderDetails> CalculateOrderDetailsAsync(IEnumerable<Product> products);
     }
 }

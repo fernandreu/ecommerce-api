@@ -5,9 +5,10 @@ using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.Model;
-
+using AutoMapper;
 using ECommerceAPI.Infrastructure.Data;
 using ECommerceAPI.Infrastructure.Extensions;
+using ECommerceAPI.Web.Helpers;
 
 namespace ECommerceAPI.FunctionalTests.Fixtures
 {
@@ -17,6 +18,8 @@ namespace ECommerceAPI.FunctionalTests.Fixtures
 
         public readonly IDynamoDBContext Context;
 
+        public readonly IMapper Mapper;
+
         private bool disposedValue = false;
 
         public FixtureParent()
@@ -24,7 +27,14 @@ namespace ECommerceAPI.FunctionalTests.Fixtures
             this.Client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
 
             this.Context = new DynamoDBContext(this.Client);
-            
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<EntryMappingProfile>();
+                cfg.AddProfile<ResourceMappingProfile>();
+            });
+            this.Mapper = config.CreateMapper();
+
             this.InitializeDatabaseAsync().Wait();
         }
         
@@ -81,7 +91,7 @@ namespace ECommerceAPI.FunctionalTests.Fixtures
         private async Task InitializeDatabaseAsync()
         {
             await this.EnsureTableIsActive();
-            await SeedData.AddTestDataAsync(this.Context, true);
+            await SeedData.AddTestDataAsync(this.Context, this.Mapper, true);
         }
     }
 }

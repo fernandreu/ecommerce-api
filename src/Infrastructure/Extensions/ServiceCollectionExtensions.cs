@@ -20,6 +20,7 @@ namespace ECommerceAPI.Infrastructure.Extensions
             
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
             services.AddSingleton<IProductChecker, ProductChecker>();
             
             services.AddDefaultAWSOptions(configuration.GetAWSOptions());

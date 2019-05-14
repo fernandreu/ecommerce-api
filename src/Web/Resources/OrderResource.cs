@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using ECommerceAPI.ApplicationCore.Entities;
-
+using ECommerceAPI.ApplicationCore.Logistics;
 using Newtonsoft.Json;
 
 namespace ECommerceAPI.Web.Resources
@@ -16,6 +16,6 @@ namespace ECommerceAPI.Web.Resources
 
         public IList<Product> Products { get; set; }
 
-        public double RequiredBinWidth { get; set; }
+        public OrderDetails Details { get; set; }
     }
 }

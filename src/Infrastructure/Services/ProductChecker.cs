@@ -1,97 +1,98 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using ECommerceAPI.ApplicationCore.Entities;
 using ECommerceAPI.ApplicationCore.Interfaces;
+using ECommerceAPI.ApplicationCore.Logistics;
 
 namespace ECommerceAPI.Infrastructure.Services
 {
     public class ProductChecker : IProductChecker
     {
-        private readonly Dictionary<string, ProductDetails> validProducts = new Dictionary<string, ProductDetails>
-        {
-            ["photoBook"] = new ProductDetails(19.0),
-            ["calendar"] = new ProductDetails(10.0),
-            ["canvas"] = new ProductDetails(16.0),
-            ["cards"] = new ProductDetails(4.7),
-            ["mug"] = new ProductDetails(94.0, 4),
-        };
+        private readonly IProductTypeRepository productTypeRepository;
 
-        public bool IsValidProductList(IEnumerable<Product> products, out string errorMessage)
+        public ProductChecker(IProductTypeRepository productTypeRepository)
+        {
+            this.productTypeRepository = productTypeRepository;
+        }
+
+        public async Task<(bool valid, string error)> IsValidProductListAsync(IEnumerable<Product> products)
         {
             var productList = products?.ToList();
 
             if (productList == null || productList.Count == 0)
             {
-                errorMessage = "The list of products cannot be null or empty";
-                return false;
+                return (false, "The list of products cannot be null or empty");
             }
 
             foreach (var product in productList)
             {
                 if (product.ProductType == null)
                 {
-                    errorMessage = "The ProductType was not specified";
-                    return false;
+                    return (false, "The ProductType was not specified");
                 }
 
-                if (!this.validProducts.ContainsKey(product.ProductType))
+                var productType = await this.productTypeRepository.GetByNameAsync(product.ProductType);
+                if (productType == null)
                 {
-                    errorMessage = $"Invalid product type: {product.ProductType}";
-                    return false;
+                    return (false, $"Invalid product type: {product.ProductType}");
                 }
 
                 if (product.Quantity < 1)
                 {
-                    errorMessage = "The Quantity must be positive";
-                    return false;
+                    return (false, "The Quantity must be positive");
                 }
             }
 
-            errorMessage = null;
-            return true;
+            return (true, null);
         }
 
-        public double CalculateRequiredWidth(IEnumerable<Product> products)
+        public async Task<OrderDetails> CalculateOrderDetailsAsync(IEnumerable<Product> products)
         {
-            var productList = products.ToList();
-
-            if (!this.IsValidProductList(productList, out var error))
+            var productList = products.ToArray();
+            var (valid, error) = await this.IsValidProductListAsync(productList);
+            if (!valid)
             {
                 throw new ArgumentException(error);
             }
-
+            
             // Combine all products of the same type (just in case they are not all specified at once)
-            var dict = new Dictionary<ProductDetails, int>();
+            var types = new Dictionary<string, (ProductType type, int count)>();
             foreach (var product in productList)
             {
-                var details = this.validProducts[product.ProductType];
-                var count = dict.GetValueOrDefault(details, 0);
-                dict[details] = count + product.Quantity;
+                if (!types.ContainsKey(product.ProductType))
+                {
+                    var productType = await this.productTypeRepository.GetByNameAsync(product.ProductType);
+                    if (productType == null)
+                    {
+                        // Unlikely, since the IsValidProductListAsync check was passed
+                        throw new ArgumentException($"The productType {product.ProductType} was not found");
+                    }
+
+                    types.Add(product.ProductType, (productType, product.Quantity));
+                }
+                else
+                {
+                    var tuple = types[product.ProductType];
+                    tuple.count += product.Quantity;
+                    types[product.ProductType] = tuple;
+                }
             }
 
-            // Calculate the actual width
-            var result = 0.0;
-            foreach (var (details, count) in dict)
+            // Calculate the actual order details
+            var result = new OrderDetails();
+            foreach (var (productType, count) in types.Values)
             {
-                result += ((count - 1) / details.MaxStack + 1) * details.RequiredWidth;
+                // TODO: Right now, the algorithm is quite simple, as it just piles up products on top of each other
+                result.Width = Math.Max(result.Width, productType.Width);
+                result.Depth = Math.Max(result.Depth, productType.Depth);
+                result.Height += productType.Height * count;
+                result.Weight += productType.Weight * count;
+                result.Price += productType.Price * count;
             }
 
             return result;
-        }
-        
-        private class ProductDetails
-        {
-            public ProductDetails(double requiredWidth, int maxStack = 1)
-            {
-                this.RequiredWidth = requiredWidth;
-                this.MaxStack = maxStack;
-            }
-
-            public double RequiredWidth { get; }
-
-            public int MaxStack { get; }
         }
     }
 }

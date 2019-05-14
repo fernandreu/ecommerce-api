@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-
+using ECommerceAPI.ApplicationCore.Interfaces;
 using ECommerceAPI.Web.Helpers;
 using ECommerceAPI.Web.Interfaces;
 using ECommerceAPI.Web.Resources;
@@ -16,9 +16,12 @@ namespace ECommerceAPI.Web.Controllers
     {
         private readonly IOrderService orderService;
 
-        public OrdersController(IOrderService orderService)
+        private readonly IProductChecker productChecker;
+
+        public OrdersController(IOrderService orderService, IProductChecker productChecker)
         {
             this.orderService = orderService;
+            this.productChecker = productChecker;
         }
 
         [HttpGet(Name = nameof(GetAllOrders))]
@@ -49,6 +52,8 @@ namespace ECommerceAPI.Web.Controllers
             {
                 return this.NotFound(new ApiError(404, "There combination of customerId and orderId specified was not found"));
             }
+
+            result.Details = await this.productChecker.CalculateOrderDetailsAsync(result.Products);
 
             return result;
         }

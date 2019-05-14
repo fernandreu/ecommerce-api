@@ -15,6 +15,7 @@ namespace ECommerceAPI.Web.Controllers
             {
                 Self = Link.To(nameof(this.GetRoot)),
                 Customers = Link.ToCollection(nameof(CustomersController.GetAllCustomers)),
+                ProductTypes = Link.ToCollection(nameof(ProductTypesController.GetAllProductTypes))
             };
 
             return this.Ok(response);
