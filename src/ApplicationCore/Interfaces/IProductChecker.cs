@@ -15,6 +15,6 @@ namespace ECommerceAPI.ApplicationCore.Interfaces
     {
         Task<(bool valid, string error)> IsValidProductListAsync(IEnumerable<Product> products);
 
-        Task<OrderDetails> CalculateOrderDetailsAsync(Order order);
+        Task<OrderDetails> CalculateOrderDetailsAsync(IEnumerable<Product> products);
     }
 }

@@ -48,9 +48,10 @@ namespace ECommerceAPI.Infrastructure.Services
             return (true, null);
         }
 
-        public async Task<OrderDetails> CalculateOrderDetailsAsync(Order order)
+        public async Task<OrderDetails> CalculateOrderDetailsAsync(IEnumerable<Product> products)
         {
-            var (valid, error) = await this.IsValidProductListAsync(order.Products);
+            var productList = products.ToArray();
+            var (valid, error) = await this.IsValidProductListAsync(productList);
             if (!valid)
             {
                 throw new ArgumentException(error);
@@ -58,7 +59,7 @@ namespace ECommerceAPI.Infrastructure.Services
             
             // Combine all products of the same type (just in case they are not all specified at once)
             var types = new Dictionary<string, (ProductType type, int count)>();
-            foreach (var product in order.Products)
+            foreach (var product in productList)
             {
                 if (!types.ContainsKey(product.ProductType))
                 {

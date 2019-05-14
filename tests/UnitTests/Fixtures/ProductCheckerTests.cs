@@ -75,10 +75,9 @@ namespace ECommerceAPI.UnitTests.Fixtures
                 new Product { ProductType = "calendar", Quantity = 2 },
                 new Product { ProductType = "mug", Quantity = 1 },
             };
-            var order = new Order { Products = products };
 
             // Act
-            var details = await this.productChecker.CalculateOrderDetailsAsync(order);
+            var details = await this.productChecker.CalculateOrderDetailsAsync(products);
 
             // Assert
             Assert.Equal(94.0, details.Width);
@@ -94,10 +93,9 @@ namespace ECommerceAPI.UnitTests.Fixtures
                 new Product { ProductType = "calendar", Quantity = 2 },
                 new Product { ProductType = "mug", Quantity = 4 },
             };
-            var order = new Order { Products = products };
 
             // Act
-            var details = await this.productChecker.CalculateOrderDetailsAsync(order);
+            var details = await this.productChecker.CalculateOrderDetailsAsync(products);
 
             // Assert
             Assert.Equal(94.0, details.Width);
@@ -117,10 +115,9 @@ namespace ECommerceAPI.UnitTests.Fixtures
                 new Product { ProductType = "mug", Quantity = 3 },
                 new Product { ProductType = "mug", Quantity = 1 },
             };
-            var order = new Order { Products = products };
 
             // Act
-            var details = await this.productChecker.CalculateOrderDetailsAsync(order);
+            var details = await this.productChecker.CalculateOrderDetailsAsync(products);
 
             // Assert
             Assert.Equal(94.0, details.Width);
