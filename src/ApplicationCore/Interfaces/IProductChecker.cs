@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ECommerceAPI.ApplicationCore.Entities;
+using ECommerceAPI.ApplicationCore.Logistics;
 
 namespace ECommerceAPI.ApplicationCore.Interfaces
 {
@@ -14,6 +15,6 @@ namespace ECommerceAPI.ApplicationCore.Interfaces
     {
         Task<(bool valid, string error)> IsValidProductListAsync(IEnumerable<Product> products);
 
-        Task<double> CalculateRequiredWidthAsync(IEnumerable<Product> products);
+        Task<OrderDetails> CalculateOrderDetailsAsync(Order order);
     }
 }

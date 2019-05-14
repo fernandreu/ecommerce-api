@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ECommerceAPI.ApplicationCore.Entities;
 using ECommerceAPI.ApplicationCore.Interfaces;
+using ECommerceAPI.Infrastructure.Data;
 using ECommerceAPI.Infrastructure.Services;
 using Xunit;
 
@@ -74,12 +75,13 @@ namespace ECommerceAPI.UnitTests.Fixtures
                 new Product { ProductType = "calendar", Quantity = 2 },
                 new Product { ProductType = "mug", Quantity = 1 },
             };
+            var order = new Order { Products = products };
 
             // Act
-            var width = await this.productChecker.CalculateRequiredWidthAsync(products);
+            var details = await this.productChecker.CalculateOrderDetailsAsync(order);
 
             // Assert
-            Assert.Equal(19.0 + 10.0 * 2 + 94.0, width);
+            Assert.Equal(94.0, details.Width);
         }
 
         [Fact]
@@ -92,12 +94,13 @@ namespace ECommerceAPI.UnitTests.Fixtures
                 new Product { ProductType = "calendar", Quantity = 2 },
                 new Product { ProductType = "mug", Quantity = 4 },
             };
+            var order = new Order { Products = products };
 
             // Act
-            var width = await this.productChecker.CalculateRequiredWidthAsync(products);
+            var details = await this.productChecker.CalculateOrderDetailsAsync(order);
 
             // Assert
-            Assert.Equal(19.0 + 10.0 * 2 + 94.0 * 4, width);
+            Assert.Equal(94.0, details.Width);
         }
 
         [Fact]
@@ -114,25 +117,17 @@ namespace ECommerceAPI.UnitTests.Fixtures
                 new Product { ProductType = "mug", Quantity = 3 },
                 new Product { ProductType = "mug", Quantity = 1 },
             };
+            var order = new Order { Products = products };
 
             // Act
-            var width = await this.productChecker.CalculateRequiredWidthAsync(products);
+            var details = await this.productChecker.CalculateOrderDetailsAsync(order);
 
             // Assert
-            Assert.Equal(19.0 + 10.0 * 2 + 94.0 * 6, width);
+            Assert.Equal(94.0, details.Width);
         }
 
         private class MockProductTypeRepository : IProductTypeRepository
         {
-            private readonly Dictionary<string, double> productWidths = new Dictionary<string, double>
-            {
-                { "photoBook", 19.0 },
-                { "calendar", 10.0 },
-                { "canvas", 16.0 },
-                { "cards", 4.7 },
-                { "mug", 94.0 },
-            };
-
             public Task<ProductType> GetByIdAsync(string id)
             {
                 throw new NotImplementedException();
@@ -155,16 +150,8 @@ namespace ECommerceAPI.UnitTests.Fixtures
 
             public Task<ProductType> GetByNameAsync(string name)
             {
-                if (!this.productWidths.ContainsKey(name))
-                {
-                    return Task.FromResult<ProductType>(null);
-                }
-
-                return Task.FromResult(new ProductType
-                {
-                    Name = name,
-                    Width = this.productWidths[name],
-                });
+                var result = SeedData.Products.FirstOrDefault(x => x.Name == name);
+                return Task.FromResult(result);
             }
         }
     }

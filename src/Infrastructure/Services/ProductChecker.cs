@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ECommerceAPI.ApplicationCore.Entities;
 using ECommerceAPI.ApplicationCore.Interfaces;
+using ECommerceAPI.ApplicationCore.Logistics;
 
 namespace ECommerceAPI.Infrastructure.Services
 {
@@ -47,19 +48,17 @@ namespace ECommerceAPI.Infrastructure.Services
             return (true, null);
         }
 
-        public async Task<double> CalculateRequiredWidthAsync(IEnumerable<Product> products)
+        public async Task<OrderDetails> CalculateOrderDetailsAsync(Order order)
         {
-            var productList = products.ToList();
-
-            var (valid, error) = await this.IsValidProductListAsync(productList);
+            var (valid, error) = await this.IsValidProductListAsync(order.Products);
             if (!valid)
             {
                 throw new ArgumentException(error);
             }
-
+            
             // Combine all products of the same type (just in case they are not all specified at once)
             var types = new Dictionary<string, (ProductType type, int count)>();
-            foreach (var product in productList)
+            foreach (var product in order.Products)
             {
                 if (!types.ContainsKey(product.ProductType))
                 {
@@ -80,11 +79,16 @@ namespace ECommerceAPI.Infrastructure.Services
                 }
             }
 
-            // Calculate the actual width
-            var result = 0.0;
+            // Calculate the actual order details
+            var result = new OrderDetails();
             foreach (var (productType, count) in types.Values)
             {
-                result += productType.Width * count;
+                // TODO: Right now, the algorithm is quite simple, as it just piles up products on top of each other
+                result.Width = Math.Max(result.Width, productType.Width);
+                result.Depth = Math.Max(result.Depth, productType.Depth);
+                result.Height += productType.Height * count;
+                result.Weight += productType.Weight * count;
+                result.Price += productType.Price * count;
             }
 
             return result;

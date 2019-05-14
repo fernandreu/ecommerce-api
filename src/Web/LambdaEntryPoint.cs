@@ -2,7 +2,7 @@ using System;
 
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-
+using AutoMapper;
 using ECommerceAPI.Infrastructure.Data;
 
 using Microsoft.AspNetCore.Hosting;
@@ -41,7 +41,9 @@ namespace ECommerceAPI.Web
 
                 try
                 {
-                    await SeedData.AddTestDataAsync(services.GetRequiredService<IDynamoDBContext>());
+                    await SeedData.AddTestDataAsync(
+                        services.GetRequiredService<IDynamoDBContext>(),
+                        services.GetRequiredService<IMapper>());
                 }
                 catch (Exception ex)
                 {
