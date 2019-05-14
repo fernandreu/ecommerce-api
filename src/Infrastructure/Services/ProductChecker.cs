@@ -16,35 +16,35 @@ namespace ECommerceAPI.Infrastructure.Services
             this.productTypeRepository = productTypeRepository;
         }
 
-        public async Task<Tuple<bool, string>> IsValidProductListAsync(IEnumerable<Product> products)
+        public async Task<(bool valid, string error)> IsValidProductListAsync(IEnumerable<Product> products)
         {
             var productList = products?.ToList();
 
             if (productList == null || productList.Count == 0)
             {
-                return Tuple.Create(false, "The list of products cannot be null or empty");
+                return (false, "The list of products cannot be null or empty");
             }
 
             foreach (var product in productList)
             {
                 if (product.ProductType == null)
                 {
-                    return Tuple.Create(false, "The ProductType was not specified");
+                    return (false, "The ProductType was not specified");
                 }
 
                 var productType = await this.productTypeRepository.GetByNameAsync(product.ProductType);
                 if (productType == null)
                 {
-                    return Tuple.Create(false, $"Invalid product type: {product.ProductType}");
+                    return (false, $"Invalid product type: {product.ProductType}");
                 }
 
                 if (product.Quantity < 1)
                 {
-                    return Tuple.Create(false, "The Quantity must be positive");
+                    return (false, "The Quantity must be positive");
                 }
             }
 
-            return Tuple.Create<bool, string>(true, null);
+            return (true, null);
         }
 
         public async Task<double> CalculateRequiredWidthAsync(IEnumerable<Product> products)
@@ -58,7 +58,7 @@ namespace ECommerceAPI.Infrastructure.Services
             }
 
             // Combine all products of the same type (just in case they are not all specified at once)
-            var types = new Dictionary<string, Tuple<ProductType, int>>();
+            var types = new Dictionary<string, (ProductType type, int count)>();
             foreach (var product in productList)
             {
                 if (!types.ContainsKey(product.ProductType))
@@ -70,12 +70,13 @@ namespace ECommerceAPI.Infrastructure.Services
                         throw new ArgumentException($"The productType {product.ProductType} was not found");
                     }
 
-                    types.Add(product.ProductType, Tuple.Create(productType, product.Quantity));
+                    types.Add(product.ProductType, (productType, product.Quantity));
                 }
                 else
                 {
-                    var (productType, count) = types[product.ProductType];
-                    types[product.ProductType] = Tuple.Create(productType, count + product.Quantity);
+                    var tuple = types[product.ProductType];
+                    tuple.count += product.Quantity;
+                    types[product.ProductType] = tuple;
                 }
             }
 

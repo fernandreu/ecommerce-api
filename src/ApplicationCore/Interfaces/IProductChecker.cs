@@ -12,7 +12,7 @@ namespace ECommerceAPI.ApplicationCore.Interfaces
     /// </summary>
     public interface IProductChecker
     {
-        Task<Tuple<bool, string>> IsValidProductListAsync(IEnumerable<Product> products);
+        Task<(bool valid, string error)> IsValidProductListAsync(IEnumerable<Product> products);
 
         Task<double> CalculateRequiredWidthAsync(IEnumerable<Product> products);
     }
